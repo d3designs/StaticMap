@@ -34,6 +34,14 @@ $styles = array(
 $map->add_marker('40.718217,-73.998284', $styles);
 
 // Display Static Map:
-echo '<img src="' . $map->get_map() . '" ' . $map->get_size() . '>';
+if ($map->is_valid())
+{
+	echo '<img src="' . $map->get_map() . '" alt="Google Map" ' . $map->get_size() . '>';
+}
+else
+{
+	echo 'Invalid Map!';
+}
+
 
 ?>

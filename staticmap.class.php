@@ -79,6 +79,24 @@ class StaticMap
 			$this->styles = array_merge($this->styles, $styles);
 	}
 
+	public function __toString()
+	{
+		return $this->get_map();
+	}
+
+	public function __get($property)
+	{
+		switch ($property)
+		{
+			case 'dimensions':
+				return $this->get_size();
+				break;
+			default:
+				return false;
+				break;
+		}
+	}
+
 	/**
 	 * Add a new marker to the map
 	 *
@@ -123,17 +141,41 @@ class StaticMap
 			$options = & $this->options;
 
 		// Make sure we have a valid request to begin with!
-		if(empty($this->markers) && !empty($options['center']) && !empty($options['zoom']))
+		if(!$this->is_valid($options))
 			return false;
 
-		$output = $this->url . http_build_query($options);
+		$output = $this->url . http_build_query($options,null,'&amp;');
 
 		foreach ($this->markers as $marker)
 		{
-			$output .= '&markers=' . urlencode($marker);
+			$output .= '&amp;markers=' . urlencode($marker);
 		}
 
 		return $output;
+	}
+
+	/**
+	 * Is Valid
+	 * Returns true or false, depending if the required options and/or markers are set
+	 *
+	 * @param array $options (optional) Custom options to validate
+	 * @return bool
+	 */
+	public function is_valid($options='')
+	{
+		if(!is_array($options))
+			$options = & $this->options;
+
+		// Google *requires* that you specify if a sensor was used.
+		if(empty($options['sensor']))
+			return false;
+
+		// If you use markers, you are not required to fill out
+		// the normally required center & zoom options
+		if(empty($this->markers) && (empty($options['center']) || empty($options['zoom'])))
+			return false;
+
+		return true;
 	}
 
 	/**
