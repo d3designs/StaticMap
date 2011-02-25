@@ -157,10 +157,10 @@ class StaticMap
 
 		foreach ($styles as $key => $value)
 		{
-			$output .= "$key:$value,";
+			$output .= "$key:$value|";
 		}
 
-		return trim($output,' ,');
+		return trim($output,' |');
 	}
 
 }
