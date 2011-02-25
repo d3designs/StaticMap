@@ -112,15 +112,21 @@ class StaticMap
 	 * Get Map
 	 * Returns a properly formatted Google Static Maps URL.
 	 *
+	 * @param array $options (optional) Temporarily set/override map options
 	 * @return string|bool $output <img> src attribute (returns false if required parameters are missing)
 	 */
-	public function get_map()
+	public function get_map($options='')
 	{
+		if(is_array($options))
+			$options = array_merge($this->options, $options);
+		else
+			$options = & $this->options;
+
 		// Make sure we have a valid request to begin with!
-		if(empty($this->markers) && !empty($this->options['center']) && !empty($this->options['zoom']))
+		if(empty($this->markers) && !empty($options['center']) && !empty($options['zoom']))
 			return false;
 
-		$output = $this->url . http_build_query($this->options);
+		$output = $this->url . http_build_query($options);
 
 		foreach ($this->markers as $marker)
 		{
