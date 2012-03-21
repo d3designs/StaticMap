@@ -4,7 +4,7 @@ Static Map
 _A super simple PHP class for the Google Static Maps API_
 
 (c) 2011 Jay Williams  
-<https://github.com/jaywilliams/StaticMap>  
+<https://github.com/d3designs/StaticMap>  
 License: MIT
 
 
